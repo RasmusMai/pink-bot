@@ -27,7 +27,7 @@ async def multiply(left : int, right : int):
 
 @bot.command()
 async def roll(dice : str):
-    """Rolls a dice. rolls:number"""
+    """I will roll a dice for you. rolls:number"""
     try:
         rolls, limit = map(int, dice.split(':'))
     except Exception:
@@ -37,39 +37,38 @@ async def roll(dice : str):
     result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
     await bot.say(result)
 
-@bot.command(description='For when you wanna settle the score some other way')
+@bot.command(description='I can let you help choose between multiple things')
 async def choose(*choices : str):
-    """Chooses between multiple choices."""
+    """I can let you help choose between multiple things"""
     await bot.say(random.choice(choices))
 
 @bot.command()
-async def repeat(times : int, content='repeating...'):
-    """Repeats a message multiple times."""
-	if times 
-    for i in range(times):
-        await bot.say(content)
-
+async def repeat(times : int, content='repeating absolutely nothing...'):
+    """I will repeat a message multiple times."""
+    if times < 10:
+        for i in range(times):
+            await bot.say(content)
+    else:
+        await bot.say('I won\'t allow more than 10 repeats.')
 @bot.command()
 async def joined(member : discord.Member):
     """Says when a member joined."""
     await bot.say('{0.name} joined in {0.joined_at}'.format(member))
 
 @bot.group(pass_context=True)
-async def cool(ctx):
-    """Says if a user is cool.
-    In reality this just checks if a subcommand is being invoked.
-    """
+async def sweet(ctx):
+    """I will declare who is sweet"""
     if ctx.invoked_subcommand is None:
-        await bot.say('No, {0.subcommand_passed} is not cool'.format(ctx))
+        await bot.say('No, {0.subcommand_passed} is not sweet'.format(ctx))
 
-@cool.command(name='Pink')
+@sweet.command(name='Pink')
 async def _bot():
     """Is Pink cool?"""
-    await bot.say('Yes, I\'m cool.')
+    await bot.say('Yes, I\'m sweet.')
 
-@cool.command(name='Duse')
+@sweet.command(name='Duse')
 async def _bot():
     """Is Pink cool?"""
-    await bot.say('Yes, Duse\'s cool.')
+    await bot.say('Yes, Duse\'s sweet.')
 
-bot.run('email', 'password')
+bot.run('email', 'pass')
