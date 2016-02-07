@@ -27,11 +27,11 @@ async def multiply(left : int, right : int):
 
 @bot.command()
 async def roll(dice : str):
-    """Rolls a dice in NdN format."""
+    """Rolls a dice. rolls:number"""
     try:
-        rolls, limit = map(int, dice.split('d'))
+        rolls, limit = map(int, dice.split(':'))
     except Exception:
-        await bot.say('Format has to be in NdN!')
+        await bot.say('Format has to be in rolls:number!')
         return
 
     result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
