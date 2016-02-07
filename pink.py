@@ -2,11 +2,11 @@ import discord
 from discord.ext import commands
 import random
 
-description = '''Pink - Your general purpose Discord bot.
-She is currently young and can't do many things yet.
+description = '''Pink - Your general purpose Discord friend.
+I'm is currently young and can't do many things yet.
 
-The available commands for Pink are available below, using * prefix.'''
-bot = commands.Bot(command_prefix='*', description=description)
+The available commands for you to use are available below, using ~ prefix.'''
+bot = commands.Bot(command_prefix='~', description=description)
 
 @bot.event
 async def on_ready():
@@ -17,12 +17,12 @@ async def on_ready():
 
 @bot.command()
 async def add(left : int, right : int):
-    """Adds two numbers together."""
+    """I'll add two numbers together."""
     await bot.say(left + right)
 
 @bot.command()
 async def multiply(left : int, right : int):
-	"""Multiplies two numbers."""
+	"""I will multiply two numbers."""
 	await bot.say(left * right)
 
 @bot.command()
@@ -52,7 +52,7 @@ async def repeat(times : int, content='repeating absolutely nothing...'):
         await bot.say('I won\'t allow more than 10 repeats.')
 @bot.command()
 async def joined(member : discord.Member):
-    """Says when a member joined."""
+    """When someone new joins, I will tell you."""
     await bot.say('{0.name} joined in {0.joined_at}'.format(member))
 
 @bot.group(pass_context=True)
@@ -63,12 +63,10 @@ async def sweet(ctx):
 
 @sweet.command(name='Pink')
 async def _bot():
-    """Is Pink cool?"""
     await bot.say('Yes, I\'m sweet.')
 
 @sweet.command(name='Duse')
 async def _bot():
-    """Is Pink cool?"""
     await bot.say('Yes, Duse\'s sweet.')
 
-bot.run('email', 'pass')
+bot.run('discordpinkbot@gmail.com', 'hunter2')
