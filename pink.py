@@ -14,9 +14,9 @@ bot = commands.Bot(command_prefix='~', description=description)
 @bot.event
 async def on_ready():
 	clear()
-    print('I\'m starting up! My username is {}'.format(bot.user.name))
-    print('My id - {}'.format(bot.user.id))
-    print('------')
+	print('I\'m starting up! My username is {}'.format(bot.user.name))
+	print('My id - {}'.format(bot.user.id))
+	print('------')
 
 @bot.command()
 async def add(left : int, right : int):
