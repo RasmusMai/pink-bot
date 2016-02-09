@@ -1,15 +1,12 @@
-import discord
+﻿import discord, random, getpass, os
 from discord.ext import commands
-import random
-import getpass
-import os
 clear = lambda: os.system('cls')
 
 description = '''Pink - Your general purpose Discord friend.
 I'm is currently young and can't do many things yet.
 
 The available commands for you to use are available below, using ~ prefix.'''
-bot = commands.Bot(command_prefix='~', description=description)
+bot = commands.Bot(command_prefix='~', description=description, category='category', pm_help=True)
 
 @bot.event
 async def on_ready():
@@ -17,7 +14,23 @@ async def on_ready():
 	print('I\'m starting up! My username is {}'.format(bot.user.name))
 	print('My id - {}'.format(bot.user.id))
 	print('------')
+	await bot.change_status(discord.Game(name = 'Type ~help for info'))
 
+@bot.command()
+async def changestatus(message):
+	'''Change my game name'''
+	await bot.say(message)
+	'''
+	if message.author == bot.user:
+		return
+	if message.content.startswith('~status'):
+		if message.author == discord.User(name = 'Rasmus'):
+			new_status = message.content[8:]
+			await bot.change_status(discord.Game(name = new_status))
+			await bot.send_message(message.channel, 'I am now playing {}'.format(new_status))
+		else:
+			await bot.send_message(message.channel, 'I\'m afraid you can\'t do that.')
+	'''
 @bot.command()
 async def add(left : int, right : int):
 	"""I'll add two numbers together."""
@@ -53,7 +66,6 @@ async def roll(dice : str):
 	except Exception:
 		await bot.say('Format has to be in rolls:number!')
 		return
-
 	result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
 	await bot.say(result)
 	print('Someone rolled {}'.format(result))
@@ -73,12 +85,13 @@ async def repeat(times : int, content='repeating absolutely nothing...'):
 			await bot.say(content)
 	else:
 		await bot.say('I won\'t allow more than 10 repeats.')
+
 @bot.command()
 async def joined(member : discord.Member):
 	"""When someone new joins, I will tell you."""
-	await bot.say('{0.name} joined in {0.joined_at}'.format(member))
+	await bot.say('**{0.name}** joined in {0.joined_at}'.format(member))
 	print ('{0.name} joined in {0.joined_at}'.format(member))
-
+	
 @bot.group(pass_context=True)
 async def sweet(ctx):
 	"""I will declare who is sweet"""
@@ -95,6 +108,16 @@ async def _bot():
 async def _bot():
 	"""Is Duse cool?"""
 	await bot.say('Yes, Duse\'s sweet.')
-email = input('Email ==> ')
-pswd = getpass.getpass('Password ==> ')
+auth = "auth.txt"
+autharray = []
+with open(auth) as file:
+	for value in file.read().split(':'):
+		autharray.append(value)
+if len(autharray) > 1:
+	email = autharray[0]
+	pswd = autharray[1]
+else:
+	print ('---No auth.txt detected or empty---')
+	email = input('Email ==> ')
+	pswd = getpass.getpass('Password ==> ')
 bot.run(email,pswd)
