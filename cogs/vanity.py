@@ -14,7 +14,7 @@ class Vanity:
         'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Don\'t count on it', 'My reply is no', 'The stars say no',
         'Outlook not so good', 'Very doubtful']
 
-    @commands.command(name="8",aliases=['8ball'])
+    @commands.command(name="8ball")
     async def _8ball(self):
         '''Ask the magic eight ball anything.'''
         await self.bot.say(random.choice(self.eightball_array))
