@@ -19,5 +19,10 @@ class Vanity:
         '''Ask the magic eight ball anything.'''
         await self.bot.say(random.choice(self.eightball_array))
 
+    @commands.command()
+    async def source(self):
+        '''Returns the link to my source code.'''
+        await self.bot.say("My source code is available on github: https://github.com/RasmusMai/pink-bot")
+
 def setup(bot):
     bot.add_cog(Vanity(bot))
