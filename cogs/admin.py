@@ -24,7 +24,7 @@ class Admin:
         return message.author == self.bot.user
 
     @commands.command(pass_context=True, hidden=True)
-    @checks.is_admin()
+    @checks.is_permissive()
     async def pinkdelete(self, ctx):
         message = ctx.message
         if ' ' in message.content:

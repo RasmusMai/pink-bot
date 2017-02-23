@@ -24,7 +24,8 @@ def is_admin():
 def is_permissive_check(message):
     with open ("admins.json") as f:
         admins = json.load(f)
-        if message.author.id in admins[message.server.id] or message.author == message.server.owner:
+        print (admins[str(message.server.id)])
+        if str(message.author.id) in admins[str(message.server.id)] or message.author == message.server.owner:
             return True
         else:
             return False
