@@ -5,7 +5,7 @@ import os, re, time, random, datetime, pprint, pickle
 import urllib.request, urllib.parse, praw, json
 
 class Reddit:
-    """Commands related to Reddit"""
+    """Commands related to Reddit."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -18,19 +18,19 @@ class Reddit:
     @commands.command()
     async def aww(self):
         '''Returns a post from r/aww'''
-        await self.bot.say(self.get_subreddit("aww"))
+        await self.bot.say(self.get_subreddit("aww").split(';',1)[1])
 
     @commands.command(aliases=['neko','kitty'])
     async def cat(self):
         '''Returns a picture of a cat.
         Uses r/meow_irl, r/cats or r/catpictures'''
-        await self.bot.say(self.get_subreddit(random.choice(['meow_irl','cats','catpictures'])))
+        await self.bot.say(self.get_subreddit(random.choice(['meow_irl','cats','catpictures'])).split(';',1)[1])
 
     @commands.command(aliases=['doggo','pupper','doge'])
     async def dog(self):
         '''Returns a picture of a dog.
         Uses r/woof_irl, r/woofbarkwoof or r/dogpictures'''
-        await self.bot.say(self.get_subreddit(random.choice(['woof_irl','woofbarkwoof','dogpictures'])))
+        await self.bot.say(self.get_subreddit(random.choice(['woof_irl','woofbarkwoof','dogpictures'])).split(';',1)[1])
 
     @commands.command(pass_context = True)
     async def subreddit(self, ctx):
@@ -46,7 +46,11 @@ class Reddit:
         if query_subreddit.endswith(' top'):
             query_subreddit = query_subreddit[:-4]
             subreddit_top = True
-        await self.bot.say(self.get_subreddit(query_subreddit,subreddit_top=subreddit_top,nsfw_channel=nsfw_channel))
+        redditresponse = self.get_subreddit(query_subreddit,subreddit_top=subreddit_top,nsfw_channel=nsfw_channel)
+        if ";" not in redditresponse:
+            await self.bot.say(redditresponse)
+            return
+        await self.bot.say("**"+redditresponse.split(';',1)[0]+"**\n"+redditresponse.split(';',1)[1])
 
     def get_subreddit(self, subreddit,subreddit_top=False, nsfw_channel=False):
         nsfw_found = False
@@ -61,14 +65,14 @@ class Reddit:
                         if submission.over_18 and not nsfw_channel:
                             nsfw_found = True
                         else:
-                            post_array.append(submission.url)
+                            post_array.append(submission.title+";"+submission.url)
             else:
                 for submission in self.reddit.subreddit(subreddit).hot(limit=25):
                     if "nsfl" not in submission.title.lower() or "nsfw\/l" not in submission.title.lower():
                         if submission.over_18 and not nsfw_channel:
                             nsfw_found = True
                         else:
-                            post_array.append(submission.url)
+                            post_array.append(submission.title+";"+submission.url)
             #await self.bot.say(random.choice(post_array))
             return (random.choice(post_array))
         except IndexError:
