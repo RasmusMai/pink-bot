@@ -14,3 +14,19 @@ def is_nsfw_check(message):
 
 def is_nsfw():
     return commands.check(lambda ctx: is_nsfw_check(ctx.message))
+
+def is_admin_check(message):
+    return message.author.id == '77145785250095104' or message.author == message.server.owner
+
+def is_admin():
+    return commands.check(lambda ctx: is_admin_check(ctx.message))
+
+def is_permissive_check(message):
+    with open ("admins.json") as f:
+        admins = json.load(f)
+        if message.author.id in admins[message.server.id] or message.author == message.server.owner:
+            return True
+        else:
+            return False
+def is_permissive():
+    return commands.check(lambda ctx:is_permissive_check(ctx.message))

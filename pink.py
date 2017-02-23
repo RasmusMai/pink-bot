@@ -33,6 +33,9 @@ async def on_message(message):
         return
     if message.content.lower().strip(' ') == ("ayy"):
         await bot.send_message(message.channel,"lmao")
+    if message.content == "minemunni":
+        deleted = await bot.purge_from(message.channel, limit=5, check=is_me)
+        await bot.send_message(message.channel, 'Deleted {} message(s)'.format(len(deleted)))
     if message.content.startswith(prefix):
         await bot.process_commands(message)
     else:
@@ -66,6 +69,28 @@ async def on_command_error(error, ctx):
         pass
     return bot
 
+def is_me(m):
+    return m.author == bot.user
+'''
+def is_pink(message):
+    return message.author == bot.user
+
+@bot.command(pass_context=True, hidden=True)
+@checks.is_admin()
+async def pinkdelete(ctx):
+    message = ctx.message
+    if ' ' in message.content:
+        print ("if")
+        print (message.content)
+        purge_limit = message.content.split(' ',1)[1]
+        if int(purge_limit) > 100:
+            print("overlimit")
+            await bot.say("Can't delete more than 100.")
+            return
+    else:
+        purge_limit = 1
+    await bot.purge_from(message.channel, limit=int(purge_limit), check=is_pink)
+'''
 @bot.event
 async def on_member_join(member):
 	await bot.send_message(member.server, member.mention + " has joined at " + str(member.joined_at.strftime("%c")) + " UTC+2. Please state your name and purpose.")
