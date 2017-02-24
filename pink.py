@@ -60,7 +60,7 @@ async def on_command_error(error, ctx):
         if "nsfw" in ctx.message.content.lower():
             await bot.send_message(channel, "I won't send NSFW messages in non-NSFW channels, sorry.")
         else:
-            await bot.send_message(channel, "Can't do that, sorry.")
+            await bot.send_message(channel, "You're not allowed to do that, sorry.")
     elif isinstance(error, commands.CommandNotFound):
             pass
     elif isinstance(error, commands.DisabledCommand):
