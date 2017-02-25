@@ -3,6 +3,9 @@ import discord, asyncio
 import os, re, time, random, datetime, pprint, pickle
 import urllib.request, urllib.parse, praw, json
 
+permissions_file = 'admins.json'
+blacklist_file = 'blacklist.json'
+
 def is_owner_check(message):
     return message.author.id == '77145785250095104'
 
@@ -22,7 +25,7 @@ def is_admin():
     return commands.check(lambda ctx: is_admin_check(ctx.message))
 
 def is_permissive_check(message):
-    with open ("admins.json") as f:
+    with open (permissions_file) as f:
         admins = json.load(f)
         if str(message.author.id) in admins[str(message.server.id)] or message.author == message.server.owner:
             return True
