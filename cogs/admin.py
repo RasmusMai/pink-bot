@@ -30,21 +30,21 @@ class Admin:
 
     @commands.command(pass_context=True)
     async def showpermissions(self, ctx):
-        '''Shows the list of members that have administrative rights
+        '''Shows the list of members that have admin permissions
 
         Can be used by anyone.'''
-        admin_list = []
+        permissions_list = []
         server = ctx.message.server
         with open (self.permissions_file) as f:
-            admins = json.load(f)
-            for member_id in admins[str(server.id)]:
+            permissions = json.load(f)
+            for member_id in permissions[str(server.id)]:
                 member = server.get_member(member_id)
                 if member is not None:
-                    admin_list.append(member.name)
-        if not admins_list:
-            await self.bot.say("There's no one in the permissions list.")
+                    permissions_list.append(member.name)
+        if not permissions_list:
+            await self.bot.say("No one has permissions.")
         else:
-            await self.bot.say("The following users can use administrative rights: "+', '.join(admin_list))
+            await self.bot.say("The following users are in the permissions list: "+', '.join(permissions_list))
 
     @commands.command(pass_context=True)
     @checks.is_admin()
@@ -53,6 +53,8 @@ class Admin:
 
         Can only be used by the bot owner or the server owner.
         Example: addpermission Rasmus#1245'''
+        if "@" not in target:
+            return
         server = ctx.message.server
         target_id = target[2:-1]
         with open (self.permissions_file, 'r') as f:
@@ -74,6 +76,8 @@ class Admin:
 
         Can only be used by the bot owner or the server owner.
         Example: removepermission Rasmus#1245'''
+        if "@" not in target:
+            return
         server = ctx.message.server
         target_id = target[2:-1]
         with open (self.permissions_file, 'r') as f:
@@ -113,6 +117,8 @@ class Admin:
 
         Can used by anyone with administrative rights.
         Example: addblacklist Rasmus#1245'''
+        if "@" not in target:
+            return
         server = ctx.message.server
         target_id = target[2:-1]
         with open (self.blacklist_file, 'r') as f:
@@ -130,10 +136,12 @@ class Admin:
     @commands.command(pass_context=True)
     @checks.is_permissive()
     async def removeblacklist(self, ctx, target : str):
-        '''Enables a person to using my commands.
+        '''Enables a person to use my commands.
 
         Can used by anyone with administrative rights.
         Example: removeblacklist Rasmus#1245'''
+        if "@" not in target:
+            return
         server = ctx.message.server
         target_id = target[2:-1]
         with open (self.blacklist_file, 'r') as f:
