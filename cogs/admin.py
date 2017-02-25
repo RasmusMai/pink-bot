@@ -9,6 +9,9 @@ class Admin:
 
     def __init__(self, bot):
         self.bot = bot
+        if not os.path.isfile('admins.json'):
+            with open ('admins.json', 'w') as f:
+                f.write('{}')
 
     @commands.command(pass_context=True, hidden=True)
     @checks.is_owner()
@@ -29,7 +32,6 @@ class Admin:
             admins = json.load(f)
             if str(server.id) not in admins.keys():
                 admins[str(server.id)] = []
-            print ("hello")
             if target_id not in admins[str(server.id)]:
                 admins[server.id].append(target_id)
                 await self.bot.say(target+" has been added to the permissions list.")
@@ -69,7 +71,6 @@ class Admin:
                 return
         else:
             await self.bot.say('Please specify the count `pinkdelete <1-100>`. Keep in mind that it also counts messages that aren\'t sent by me')
-        print ("yo wat")
         deleted = await self.bot.purge_from(message.channel, limit=int(purge_limit), check=self.is_pink)
         await self.bot.say('Deleted {} message(s)'.format(len(deleted)))
 
