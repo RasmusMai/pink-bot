@@ -16,24 +16,41 @@ The credentials.json used for authentication should look something like.
 ```
 # Features
 Administration
+
 • Blacklisting
+
 • Basic permissions
+
 • Self message purge
 
+
 General
+
 • Weather lookup
+
 • Youtube video search
+
 • Announces people leaving and joining the server/guild.
 
+
 Reddit
+
 • Random post from a subreddit
+
 • Pictures of cats, dogs or other cute beings
 
+
 Server specific
+
 • Self assigning color roles
 
+
 Vanity
+
 • Link to github
+
 • The magic eight ball
+
 • Sends a random weeaboo picture anytime someone mentions `weeb`
+
 • Reacts to `ayy` with a `lmao`
