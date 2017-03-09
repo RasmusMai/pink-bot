@@ -11,12 +11,11 @@ class Rofoc:
         self.bot = bot
 
     @commands.command(aliases=['colour'], pass_context=True)
-    async def color(self,ctx):
+    async def color(self,ctx,requested_color : str):
         '''Change the color of your own name.
         Example: color green'''
         message = ctx.message
         possible_colors = ['red','blue','green','purple','orange','yellow','grey','brown','none']
-        requested_color = message.content.split(' ', 1)[1]
         requested_color = requested_color.lower().strip()
         if requested_color in possible_colors:
             for server_role in message.server.roles:

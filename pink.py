@@ -68,8 +68,6 @@ async def on_command_error(error, ctx):
             pass
     elif isinstance(error, commands.DisabledCommand):
             await bot.send_message(channel, "That command is disabled.")
-    else:
-        pass
     return bot
 
 @bot.event

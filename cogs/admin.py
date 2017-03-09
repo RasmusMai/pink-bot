@@ -52,8 +52,9 @@ class Admin:
         '''Allows a member to use administrative rights
 
         Can only be used by the bot owner or the server owner.
-        Example: addpermission Rasmus#1245'''
-        if "@" not in target:
+        Example: addpermission @Rasmus#1245'''
+        if "<@" not in target:
+            await self.bot.say("Please use a mention: `addpermission @Rasmus#1245`")
             return
         server = ctx.message.server
         target_id = target[2:-1]
@@ -75,8 +76,9 @@ class Admin:
         '''Disallows a member to use administrative rights
 
         Can only be used by the bot owner or the server owner.
-        Example: removepermission Rasmus#1245'''
-        if "@" not in target:
+        Example: removepermission @Rasmus#1245'''
+        if "<@" not in target:
+            await self.bot.say("Please use a mention: `removepermission @Rasmus#1245`")
             return
         server = ctx.message.server
         target_id = target[2:-1]
@@ -116,11 +118,15 @@ class Admin:
         '''Disables a person from using my commands.
 
         Can used by anyone with administrative rights.
-        Example: addblacklist Rasmus#1245'''
-        if "@" not in target:
+        Example: addblacklist @Rasmus#1245'''
+        if "<@" not in target:
+            await self.bot.say("Please use a mention: `addblacklist @Rasmus#1245`")
             return
         server = ctx.message.server
         target_id = target[2:-1]
+        if target_id == "77145785250095104" or target_id == server.owner.id:
+            await self.bot.say("You can't blacklist my owner or the server owner.")
+            return
         with open (self.blacklist_file, 'r') as f:
             blacklist = json.load(f)
             if str(server.id) not in blacklist.keys():
@@ -139,8 +145,9 @@ class Admin:
         '''Enables a person to use my commands.
 
         Can used by anyone with administrative rights.
-        Example: removeblacklist Rasmus#1245'''
-        if "@" not in target:
+        Example: removeblacklist @Rasmus#1245'''
+        if "<@" not in target:
+            await self.bot.say("Please use a mention: `removeblacklist @Rasmus#1245`")
             return
         server = ctx.message.server
         target_id = target[2:-1]
@@ -159,7 +166,7 @@ class Admin:
     def is_pink(self, message):
         return message.author == self.bot.user
 
-    @commands.command(pass_context=True, hidden=True)
+    @commands.command(pass_context=True)
     @checks.is_permissive()
     async def pinkdelete(self, ctx):
         '''Used to delete my own messages
