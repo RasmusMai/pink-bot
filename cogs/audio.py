@@ -8,7 +8,7 @@ class Audio:
 
     def __init__(self, bot):
         self.bot = bot
-        if self.bot.opus.is_loaded():
+        if discord.opus.is_loaded():
             print ("Opus loaded")
         else:
             print ("Opus not loaded")
