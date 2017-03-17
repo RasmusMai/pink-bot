@@ -72,7 +72,7 @@ async def on_command_error(error, ctx):
 
 @bot.event
 async def on_member_join(member):
-	await bot.send_message(member.server, member.mention + " has joined at " + str(member.joined_at.strftime("%c")) + " UTC+2. Please state your name and purpose.")
+	await bot.send_message(member.server, member.mention + " has joined.")
 @bot.event
 async def on_member_remove(member):
 	await bot.send_message(member.server, member.mention + " has left :o")
@@ -88,18 +88,19 @@ def load_credentials():
         return json.load(f)
 
 if __name__ == '__main__':
+    for extension in initial_cogs:
+        try:
+            print('Loading extension -- ', end='')
+            bot.load_extension(extension)
+            print(' -- Success')
+        except Exception as e:
+            print('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
     try:
         os.system('clear')
     except:
         os.system('cls')
     blacklist_file = 'blacklist.json'
     print('<><><><><><><><><><><><><><><><><><><><><><><><><>')
-    for extension in initial_cogs:
-        try:
-            bot.load_extension(extension)
-        except Exception as e:
-            print('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
-
     credentials = load_credentials()
     token = credentials['token']
     bot.run(token)
