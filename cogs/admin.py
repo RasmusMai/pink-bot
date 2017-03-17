@@ -186,10 +186,5 @@ class Admin:
         deleted = await self.bot.purge_from(message.channel, limit=int(purge_limit), check=self.is_pink)
         await self.bot.say('Deleted {} message(s)'.format(len(deleted)))
 
-        @commands.command(pass_context=True)
-        @checks.is_owner()
-        async def addnsfwchannel(self, ctx):
-            pass
-
 def setup(bot):
     bot.add_cog(Admin(bot))

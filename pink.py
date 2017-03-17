@@ -88,11 +88,18 @@ def load_credentials():
         return json.load(f)
 
 if __name__ == '__main__':
+    credentials = load_credentials()
+    if 'token' not in credentials.keys():
+        print("No token provided. Exiting.")
+        return
     for extension in initial_cogs:
         try:
-            print('Loading extension -- ', end='')
-            bot.load_extension(extension)
-            print(' -- Success')
+            if extension == 'cogs.reddit' and reddit_secret not in credentials.keys():
+                print ('Ignoring '+extension+'. No key in credentials.json provided.')
+            else:
+                print('Loading extension -- ' + extension, end='')
+                bot.load_extension(extension)
+                print(' -- Success')
         except Exception as e:
             print('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
     try:
@@ -101,6 +108,5 @@ if __name__ == '__main__':
         os.system('cls')
     blacklist_file = 'blacklist.json'
     print('<><><><><><><><><><><><><><><><><><><><><><><><><>')
-    credentials = load_credentials()
     token = credentials['token']
     bot.run(token)
