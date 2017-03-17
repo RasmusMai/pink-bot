@@ -10,6 +10,7 @@ initial_cogs = [
     'cogs.stats',
     'cogs.reddit',
     'cogs.rofoc',
+    'cogs.audio',
     'cogs.admin'
 ]
 
@@ -91,10 +92,10 @@ if __name__ == '__main__':
     credentials = load_credentials()
     if 'token' not in credentials.keys():
         print("No token provided. Exiting.")
-        return
+        exit()
     for extension in initial_cogs:
         try:
-            if extension == 'cogs.reddit' and reddit_secret not in credentials.keys():
+            if extension == 'cogs.reddit' and 'reddit_secret' not in credentials.keys():
                 print ('Ignoring '+extension+'. No key in credentials.json provided.')
             else:
                 print('Loading extension -- ' + extension, end='')
