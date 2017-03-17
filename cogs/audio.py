@@ -28,7 +28,7 @@ class Audio:
                 await self.bot.say("Joined voice channel "+self.voice.channel.name)
             else:
                 await self.bot.say("Please join a voice channel and request again. I can't follow you to nowhere.")
-                    return
+                return
         target = target.lower()
         if 'youtube.com' not in target:
             await self.bot.say("That's not a youtube link.")
