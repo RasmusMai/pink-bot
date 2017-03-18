@@ -23,15 +23,14 @@ class Stats:
         days_passed = (ctx.message.timestamp - server.created_at).days
         created_at = ("Anno "+server.created_at.strftime("%d %b %Y %H:%M")+". "+days_passed+" days ago.")
         color = discord.Color(random.randint(0,16777215))
-        embed = discord.Embed(description=created_at,
-                                colour=color,
-                                embed.add_field(name="Region", value=str(server.region))
-                                embed.add_field(name="Users", value="{}/{}".format(online, user_count))
-                                embed.add_field(name="Text Channels", value=text_channels)
-                                embed.add_field(name="Voice Channels", value=voice_channels)
-                                embed.add_field(name="Roles", value=len(server.roles))
-                                embed.add_field(name="Owner", value=str(server.owner))
-                                embed.set_footer(text="Server ID: " + server.id))
+        embed = discord.Embed(description=created_at, colour=color)
+        embed.add_field(name="Region", value=str(server.region))
+        embed.add_field(name="Users", value=online_count+"/"+user_count)
+        embed.add_field(name="Text Channels", value=text_channels)
+        embed.add_field(name="Voice Channels", value=voice_channels)
+        embed.add_field(name="Roles", value=len(server.roles))
+        embed.add_field(name="Owner", value=str(server.owner))
+        embed.set_footer(text="Server ID: " + server.id))
         if server.icon_url:
             embed.set_author(name=server.name, url=server.icon_url)
             embed.set_thumbnail(url=server.icon_url)

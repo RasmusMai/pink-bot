@@ -14,7 +14,7 @@ class Audio:
     async def joinvoice(self, ctx):
         if ctx.message.author.voice.voice_channel is not None:
             self.voice = await self.bot.join_voice_channel(ctx.message.author.voice.voice_channel)
-            await self.bot.say("Joined voice channel "+self.voice.channel.name)
+            await self.bot.say("Joined voice channel "+ctx.message.author.voice.voice_channel.name)
         else:
             await self.bot.say("Please join a voice channel and request again. I can't follow you to nowhere.")
 
@@ -32,7 +32,7 @@ class Audio:
             await self.bot.say("That's not a youtube link.")
             return
         try:
-            self.player = await self.voice.create_ytdl_player(target)
+            self.player = self.voice.create_ytdl_player(target)
             await self.bot.say("Playing: "+target)
             self.player.start()
         except Exception as e:
