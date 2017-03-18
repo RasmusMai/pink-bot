@@ -3,6 +3,13 @@ import discord, asyncio
 from cogs.utils import checks
 import os, re, time, random, datetime, pprint, pickle
 import urllib.request, urllib.parse, praw, json
+import logging
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler(filename='logger.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 initial_cogs = [
     'cogs.general',
@@ -68,6 +75,8 @@ async def on_command_error(error, ctx):
             pass
     elif isinstance(error, commands.DisabledCommand):
             await bot.send_message(channel, "That command is disabled.")
+    elif isinstance(error, commands.NoPrivateMessage):
+        await bot.send_message(ctx.message.author, 'Sorry, I can\'t do this in private messages.')
     return bot
 
 @bot.event

@@ -20,7 +20,7 @@ class Audio:
 
     @commands.command(pass_context=True, no_pm=True, hidden=True)
     async def playyoutube(self, ctx, target : str):
-        if self.voice.is_connected() is None:
+        if self.voice or self.voice.is_connected() is None:
             if ctx.message.author.voice.voice_channel is not None:
                 self.voice = await bot.join_voice_channel()
                 await self.bot.say("Joined voice channel "+self.voice.channel.name)
