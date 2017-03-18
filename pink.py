@@ -10,7 +10,6 @@ initial_cogs = [
     'cogs.stats',
     'cogs.reddit',
     'cogs.rofoc',
-    'cogs.audio',
     'cogs.admin'
 ]
 

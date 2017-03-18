@@ -58,6 +58,7 @@ class Admin:
             return
         server = ctx.message.server
         target_id = target[2:-1]
+        target_id = target_id.strip('!')
         with open (self.permissions_file, 'r') as f:
             admins = json.load(f)
             if str(server.id) not in admins.keys():
@@ -82,6 +83,7 @@ class Admin:
             return
         server = ctx.message.server
         target_id = target[2:-1]
+        target_id = target_id.strip('!')
         with open (self.permissions_file, 'r') as f:
             admins = json.load(f)
             if str(server.id) not in admins.keys():
@@ -124,6 +126,7 @@ class Admin:
             return
         server = ctx.message.server
         target_id = target[2:-1]
+        target_id = target_id.strip('!')
         if target_id == "77145785250095104" or target_id == server.owner.id:
             await self.bot.say("You can't blacklist my owner or the server owner.")
             return
@@ -151,6 +154,7 @@ class Admin:
             return
         server = ctx.message.server
         target_id = target[2:-1]
+        target_id = target_id.strip('!')
         with open (self.blacklist_file, 'r') as f:
             blacklist = json.load(f)
             if str(server.id) not in blacklist.keys():
