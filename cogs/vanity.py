@@ -46,7 +46,7 @@ class Vanity:
     async def togglecatfacts(self):
         with open (self.catfacts_file, 'r') as f:
             catfacts = json.load(f)
-            if str(server.id) not in catfacts['enabled_servers']
+            if str(server.id) not in catfacts['enabled_servers']:
                 catfacts['enabled_servers'].append(str(server.id))
                 await self.bot.say("Catfacts have been enabled for this server.")
             else:

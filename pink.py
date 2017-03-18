@@ -25,7 +25,8 @@ Born from severe crippling depression in addition to autism. If you have complai
 
 '''
 prefix = ""
-bot = commands.Bot(command_prefix=prefix, description=description, pm_help=True)
+help_attrs = dict(name="pinkhelp")
+bot = commands.Bot(command_prefix=prefix, description=description, pm_help=True, help_attrs=help_attrs)
 
 @bot.event
 async def on_ready():
