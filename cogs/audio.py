@@ -10,17 +10,17 @@ class Audio:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, no_pm=True, hidden=True)
     async def joinvoice(self, ctx):
         if ctx.message.author.voice.voice_channel is not None:
-            self.voice = await self.bot.join_voice_channel()
+            self.voice = await self.bot.join_voice_channel(ctx.message.author.voice.voice_channel)
             await self.bot.say("Joined voice channel "+self.voice.channel.name)
         else:
             await self.bot.say("Please join a voice channel and request again. I can't follow you to nowhere.")
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, no_pm=True, hidden=True)
     async def playyoutube(self, ctx, target : str):
-        if voice.is_connected() is None:
+        if self.voice.is_connected() is None:
             if ctx.message.author.voice.voice_channel is not None:
                 self.voice = await bot.join_voice_channel()
                 await self.bot.say("Joined voice channel "+self.voice.channel.name)
@@ -39,9 +39,9 @@ class Audio:
             await self.bot.say("Failed to play the requested video, please double check the link.")
             print (e)
 
-    @commands.command()
+    @commands.command(no_pm=True, hidden=True)
     async def stopvoice(self, ctx):
-        if voice.is_connected() is None:
+        if self.voice.is_connected() is None:
             await self.bot.say("I'm not in any voice channels.")
         if self.player.is_playing():
             self.player.stop()

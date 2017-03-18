@@ -15,7 +15,7 @@ initial_cogs = [
 ]
 
 description = '''Hey, I'm Pink.
-Born from severe crippling depression in addition to autism.
+Born from severe crippling depression in addition to autism. If you have complaints, forward them to Rasmus#1245.
 
 '''
 prefix = ""
