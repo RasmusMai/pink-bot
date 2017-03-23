@@ -101,7 +101,15 @@ def load_credentials():
     with open('credentials.json') as f:
         return json.load(f)
 
+def do_checks():
+    if not os.path.isfile('credentials.json'):
+        print ("No 'credentials.json' found. An example is given on the github page.")
+        exit()
+    if sys.version_info < (3, 5):
+        print ("Python versions older than 3.5 are not supported.")
+
 if __name__ == '__main__':
+    do_checks()
     credentials = load_credentials()
     if 'token' not in credentials.keys():
         print("No token provided. Exiting.")

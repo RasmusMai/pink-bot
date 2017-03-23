@@ -19,8 +19,16 @@ class Admin:
                 f.write('{}')
 
     @commands.command(pass_context=True, hidden=True)
+    @checks.is_admin()
+    async def changenickname(self, ctx, target : str):
+        if target == 'none':
+            await self.bot.change_nickname(ctx.message.server.me, None)
+        else:
+            await self.bot.change_nickname(ctx.message.server.me, target)
+
+    @commands.command(pass_context=True, hidden=True)
     @checks.is_owner()
-    async def changepresence(self,ctx):
+    async def changepresence(self, ctx):
         await self.bot.change_presence(game=discord.Game(name = ctx.message.content.split(' ', 1)[1]))
 
     @commands.command(pass_context=True, hidden=True)
