@@ -1,4 +1,5 @@
 *.json
+*.log
 weeb_pics/
 weeb.txt
 __pycache__/

@@ -1,9 +1,9 @@
 from discord.ext import commands
 import discord, asyncio
 from cogs.utils import checks
-import os, re, time, random, datetime, pprint, pickle
+import os, re, sys, time, random, datetime, pprint, pickle
 import urllib.request, urllib.parse, praw, json
-import logging
+import logging, platform, traceback
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
@@ -73,11 +73,15 @@ async def on_command_error(error, ctx):
         else:
             await bot.send_message(channel, "You're not allowed to do that, sorry.")
     elif isinstance(error, commands.CommandNotFound):
-            pass
+        pass
     elif isinstance(error, commands.DisabledCommand):
-            await bot.send_message(channel, "That command is disabled.")
+        await bot.send_message(channel, "That command is disabled.")
     elif isinstance(error, commands.NoPrivateMessage):
         await bot.send_message(ctx.message.author, 'Sorry, I can\'t do this in private messages.')
+    elif isinstance(error, commands.CommandInvokeError):
+        print('In {0.command.qualified_name}:'.format(ctx), file=sys.stderr)
+        traceback.print_tb(error.original.__traceback__)
+        print('{0.__class__.__name__}: {0}'.format(error.original), file=sys.stderr)
     return bot
 
 @bot.event
@@ -110,12 +114,13 @@ if __name__ == '__main__':
                 print('Loading extension -- ' + extension, end='')
                 bot.load_extension(extension)
                 print(' -- Success')
+                time.sleep(0.2)
         except Exception as e:
             print('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
-    try:
-        os.system('clear')
-    except:
+    if platform.system() == 'Windows':
         os.system('cls')
+    else:
+        os.system('clear')
     blacklist_file = 'blacklist.json'
     print('<><><><><><><><><><><><><><><><><><><><><><><><><>')
     token = credentials['token']

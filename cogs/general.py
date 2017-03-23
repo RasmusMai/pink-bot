@@ -9,7 +9,7 @@ class General:
 
     def __init__(self, bot):
         self.bot = bot
-        with open('credentials-test.json') as f:
+        with open('credentials.json') as f:
             self.weather_key = json.load(f)['openweathermap']
 
     @commands.command(hidden=True)

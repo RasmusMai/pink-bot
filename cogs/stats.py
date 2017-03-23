@@ -7,10 +7,10 @@ import urllib.request, urllib.parse, praw, json
 class Stats:
     '''Statistics'''
 
-    def __init__(bot, self):
+    def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(pass_conext=True, no_pm=True)
+    @commands.command(pass_context=True, no_pm=True)
     async def serverinfo(self, ctx):
         '''Displays info about the serverinfo
 
@@ -21,21 +21,22 @@ class Stats:
         text_channels = len([x for x in server.channels if x.type == discord.ChannelType.text])
         voice_channels = len(server.channels) - text_channels
         days_passed = (ctx.message.timestamp - server.created_at).days
-        created_at = ("Anno "+server.created_at.strftime("%d %b %Y %H:%M")+". "+days_passed+" days ago.")
+        created_at = ("Anno "+server.created_at.strftime("%d %b %Y %H:%M")+". "+str(days_passed)+" days ago.")
         color = discord.Color(random.randint(0,16777215))
         embed = discord.Embed(description=created_at, colour=color)
         embed.add_field(name="Region", value=str(server.region))
-        embed.add_field(name="Users", value=online_count+"/"+user_count)
+        embed.add_field(name="Users", value=str(online_count)+"/"+str(user_count))
         embed.add_field(name="Text Channels", value=text_channels)
         embed.add_field(name="Voice Channels", value=voice_channels)
         embed.add_field(name="Roles", value=len(server.roles))
         embed.add_field(name="Owner", value=str(server.owner))
+        embed.set_footer(text="Server ID: " + server.id)
         if server.icon_url:
             embed.set_author(name=server.name, url=server.icon_url)
             embed.set_thumbnail(url=server.icon_url)
         else:
             embed.set_author(name=server.name)
-        await self.bot.say(embed=data)
+        await self.bot.say(embed=embed)
 
 def setup(bot):
     bot.add_cog(Stats(bot))

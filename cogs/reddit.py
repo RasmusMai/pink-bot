@@ -9,7 +9,7 @@ class Reddit:
 
     def __init__(self, bot):
         self.bot = bot
-        with open('credentials-test.json') as f:
+        with open('credentials.json') as f:
             credentials = json.load(f)
             self.reddit = praw.Reddit(client_id=credentials['reddit_id'],
                         client_secret=credentials['reddit_secret'],
