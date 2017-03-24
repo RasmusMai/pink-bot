@@ -2,7 +2,7 @@ from discord.ext import commands
 import discord, asyncio
 from .utils import checks
 import os, re, time, threading, random, datetime, pprint, pickle
-import urllib.request, urllib.parse, praw, json
+import urllib.request, urllib.parse, praw, json, markovify
 
 class Vanity:
     """Meme commands"""
@@ -14,6 +14,8 @@ class Vanity:
         'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Don\'t count on it', 'My reply is no', 'The stars say no',
         'Outlook not so good', 'Very doubtful']
         self.catfacts_file = 'catfacts.json'
+        self.markov_file = 'markov.txt'
+        self.markov_json = 'markov.json'
         if not os.path.isfile(self.catfacts_file):
             with open (self.catfacts_file, 'w') as f:
                 f.write('{"enabled_servers":[]')
@@ -37,23 +39,38 @@ class Vanity:
         '''Returns the link to my source code.'''
         await self.bot.say("My source code is available on github: https://github.com/RasmusMai/pink-bot")
 
-    @commands.command(name="i have no gf", hidden=True)
-    async def _ihavenogf(self):
-        await self.bot.say("same")
+    '''
+        @commands.command(pass_context=True)
+        @checks.is_admin()
+        async def togglecatfacts(self):
+            with open (self.catfacts_file, 'r') as f:
+                catfacts = json.load(f)
+                if str(server.id) not in catfacts['enabled_servers']:
+                    catfacts['enabled_servers'].append(str(server.id))
+                    await self.bot.say("Catfacts have been enabled for this server.")
+                else:
+                    catfacts['enabled_servers'].remove(str(server.id))
+                    await self.bot.say("Catfacts have been disabled for this server.")
+            with open (self.catfacts_file, 'w') as f:
+                json.dump(catfacts,f,sort_keys = True,indent = 4)
+    '''
 
-    @commands.command(pass_context=True)
-    @checks.is_admin()
-    async def togglecatfacts(self):
-        with open (self.catfacts_file, 'r') as f:
-            catfacts = json.load(f)
-            if str(server.id) not in catfacts['enabled_servers']:
-                catfacts['enabled_servers'].append(str(server.id))
-                await self.bot.say("Catfacts have been enabled for this server.")
-            else:
-                catfacts['enabled_servers'].remove(str(server.id))
-                await self.bot.say("Catfacts have been disabled for this server.")
-        with open (self.catfacts_file, 'w') as f:
-            json.dump(catfacts,f,sort_keys = True,indent = 4)
+    @commands.command()
+    async def generatemarkov(self):
+        with open(self.markov_file, 'r') as f:
+            text = f.read()
+        text_model = markovify.NewlineText(text)
+        with open(self.markov_json, 'w') as f:
+            json_model = text_model.to_json()
+            f.write(json_model)
+        await self.bot.say("Generated and saved.")
+
+    @commands.command()
+    async def markov(self):
+        with open(self.markov_file, 'r') as f:
+            text_json = json_load(f)
+        text_model = markovify.Text.from_json(text_model)
+        await self.bot.say(text_model.make_short_sentence(140))
 
 def setup(bot):
     bot.add_cog(Vanity(bot))
