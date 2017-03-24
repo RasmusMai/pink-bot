@@ -19,6 +19,7 @@ class Vanity:
         if not os.path.isfile(self.catfacts_file):
             with open (self.catfacts_file, 'w') as f:
                 f.write('{"enabled_servers":[]')
+        self.command_list = ['8ball', 'subreddit', 'youtube', 'addblacklist', 'removeblacklist', 'addpermissions', 'removepermissions', 'weather', 'color', 'colour']
 
     async def catfacts_loop():
         response = json.loads(urllib.request.urlopen("https://catfacts-api.appspot.com/api/facts").read().decode())
@@ -57,10 +58,16 @@ class Vanity:
 
     @commands.command()
     async def markov(self):
-        with open(self.markov_file, 'r') as f:
+        start_time = time.time()
+        with open(self.markov_file, 'r+') as f:
             text = f.read()
+            for i in range(0,len(self.command_list)):
+                text = text.replace(self.command_list[i]+' ', '')
+            f.write(text)
         text_model = markovify.NewlineText(text)
         await self.bot.say(text_model.make_short_sentence(140))
-
+        end_time = time.time()
+        diff_time = end_time - start_time
+        print ("Markov took - "+str(diff_time))
 def setup(bot):
     bot.add_cog(Vanity(bot))

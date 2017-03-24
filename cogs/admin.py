@@ -21,10 +21,14 @@ class Admin:
     @commands.command(pass_context=True, hidden=True)
     @checks.is_admin()
     async def changenickname(self, ctx, target : str):
-        if target == 'none':
+        if len(target) > 32:
+            await self.bot.change_nickname("That name is too long.")
+        elif target == 'none':
             await self.bot.change_nickname(ctx.message.server.me, None)
+            await self.bot.say("Nickname removed.")
         else:
             await self.bot.change_nickname(ctx.message.server.me, target)
+            await self.bot.say("Nickname changed.")
 
     @commands.command(pass_context=True, hidden=True)
     @checks.is_owner()
