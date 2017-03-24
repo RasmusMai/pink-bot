@@ -3,7 +3,7 @@ import discord, asyncio
 from cogs.utils import checks
 import os, re, sys, time, random, datetime, pprint, pickle
 import urllib.request, urllib.parse, praw, json
-import logging, platform, traceback
+import logging, platform, traceback, markovify
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
@@ -39,6 +39,9 @@ async def on_ready():
 async def on_message(message):
     if message.author.bot:
         return
+    if message.server.id == "130386553548701696" or "224905357409910786":
+        with open ('markov.txt', 'a') as markov_file:
+            markov_file.write(message.content+'\n')
     with open (blacklist_file, 'r') as f:
         blacklist = json.load(f)
         if str(message.server.id) not in blacklist.keys():
@@ -107,9 +110,19 @@ def do_checks():
         exit()
     if sys.version_info < (3, 5):
         print ("Python versions older than 3.5 are not supported.")
+    if not os.path.isfile('markov.txt'):
+            with open ('markov.txt', 'w') as f:
+                f.write('')
+
+def generate_markov(markov_file):
+    with open(markov_file, 'r') as f:
+        markov_text = f.read()
+        markov_model = markovify.NewlineText(markov_text)
+
 
 if __name__ == '__main__':
     do_checks()
+    generate_markov('markov.txt')
     credentials = load_credentials()
     if 'token' not in credentials.keys():
         print("No token provided. Exiting.")
