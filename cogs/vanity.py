@@ -56,20 +56,10 @@ class Vanity:
     '''
 
     @commands.command()
-    async def generatemarkov(self):
+    async def markov(self):
         with open(self.markov_file, 'r') as f:
             text = f.read()
         text_model = markovify.NewlineText(text)
-        with open(self.markov_json, 'w') as f:
-            json_model = text_model.to_json()
-            f.write(json_model)
-        await self.bot.say("Generated and saved.")
-
-    @commands.command()
-    async def markov(self):
-        with open(self.markov_file, 'r') as f:
-            text_json = json_load(f)
-        text_model = markovify.Text.from_json(text_model)
         await self.bot.say(text_model.make_short_sentence(140))
 
 def setup(bot):
