@@ -114,15 +114,8 @@ def do_checks():
             with open ('markov.txt', 'w') as f:
                 f.write('')
 
-def generate_markov(markov_file):
-    with open(markov_file, 'r') as f:
-        markov_text = f.read()
-        markov_model = markovify.NewlineText(markov_text)
-
-
 if __name__ == '__main__':
     do_checks()
-    generate_markov('markov.txt')
     credentials = load_credentials()
     if 'token' not in credentials.keys():
         print("No token provided. Exiting.")

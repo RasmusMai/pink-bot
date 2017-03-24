@@ -63,6 +63,8 @@ class Vanity:
             text = f.read()
             for i in range(0,len(self.command_list)):
                 text = text.replace(self.command_list[i]+' ', '')
+            f.seek(0)
+            f.truncate()
             f.write(text)
         text_model = markovify.NewlineText(text)
         await self.bot.say(text_model.make_short_sentence(140))
