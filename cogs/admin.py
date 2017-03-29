@@ -44,7 +44,10 @@ class Admin:
     async def permissions(self, ctx):
         '''Shows the list of members that have admin permissions
 
-        Can be used by anyone.'''
+        Can be used by anyone.
+
+        Append an 'add' or 'remove' after the command to make changes.
+        Example: permissions add @Rasmus#1245'''
         permissions_list = []
         server = ctx.message.server
         if ctx.invoked_subcommand is None:
@@ -67,7 +70,7 @@ class Admin:
         '''Allows a member to use administrative rights
 
         Can only be used by the bot owner or the server owner.
-        Example: addpermission @Rasmus#1245'''
+        Example: permissions add @Rasmus#1245'''
         if "<@" not in target:
             await self.bot.say("Please use a mention: `addpermission @Rasmus#1245`")
             return
@@ -92,7 +95,7 @@ class Admin:
         '''Disallows a member to use administrative rights
 
         Can only be used by the bot owner or the server owner.
-        Example: removepermission @Rasmus#1245'''
+        Example: permissions remove @Rasmus#1245'''
         if "<@" not in target:
             await self.bot.say("Please use a mention: `removepermission @Rasmus#1245`")
             return
@@ -115,7 +118,10 @@ class Admin:
     async def blacklist(self, ctx):
         '''Shows the list of members that are blacklisted
 
-        Can be used by anyone.'''
+        Can be used by anyone.
+
+        Append an 'add' or 'remove' after the command to make changes.
+        Example: blacklist add @Rasmus#1245'''
         blacklist_list = []
         server = ctx.message.server
         if ctx.invoked_subcommand is None:
@@ -138,7 +144,7 @@ class Admin:
         '''Disables a person from using my commands.
 
         Can used by anyone with administrative rights.
-        Example: addblacklist @Rasmus#1245'''
+        Example: blacklist add @Rasmus#1245'''
         if "<@" not in target:
             await self.bot.say("Please use a mention: `addblacklist @Rasmus#1245`")
             return
@@ -166,7 +172,7 @@ class Admin:
         '''Enables a person to use my commands.
 
         Can used by anyone with administrative rights.
-        Example: removeblacklist @Rasmus#1245'''
+        Example: blacklist add @Rasmus#1245'''
         if "<@" not in target:
             await self.bot.say("Please use a mention: `removeblacklist @Rasmus#1245`")
             return

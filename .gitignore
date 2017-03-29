@@ -1,5 +1,6 @@
 *.json
 *.log
 *.txt
+markov/
 weeb_pics/
 __pycache__/

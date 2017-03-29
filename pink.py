@@ -44,9 +44,9 @@ async def on_message(message):
         with open ('markov.txt', 'a') as markov_file:
             markov_file.write(message.content+'\n')
     '''
-    with open ('markov/'+message.server.id+'.txt', 'a') as markov_file:
-        markov_file.write(message.content+'\n')
     if not message.channel.is_private:
+        with open ('markov/'+message.server.id+'.txt', 'a') as markov_file:
+            markov_file.write(message.content+'\n')
         with open (blacklist_file, 'r') as f:
             blacklist = json.load(f)
             if str(message.server.id) not in blacklist.keys():
