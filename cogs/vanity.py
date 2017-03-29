@@ -5,7 +5,7 @@ import os, re, time, threading, random, datetime, pprint, pickle
 import urllib.request, urllib.parse, praw, json, markovify
 
 class Vanity:
-    """Meme commands"""
+    '''Commands with no purpose, but to entertain.'''
 
     def __init__(self, bot):
         self.bot = bot
@@ -14,7 +14,6 @@ class Vanity:
         'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Don\'t count on it', 'My reply is no', 'The stars say no',
         'Outlook not so good', 'Very doubtful']
         self.catfacts_file = 'catfacts.json'
-        self.markov_file = 'markov.txt'
         self.markov_json = 'markov.json'
         if not os.path.isfile(self.catfacts_file):
             with open (self.catfacts_file, 'w') as f:
@@ -35,11 +34,6 @@ class Vanity:
         '''Ask the magic eight ball anything.'''
         await self.bot.say(random.choice(self.eightball_array))
 
-    @commands.command()
-    async def source(self):
-        '''Returns the link to my source code.'''
-        await self.bot.say("My source code is available on github: https://github.com/RasmusMai/pink-bot")
-
     '''
         @commands.command(pass_context=True)
         @checks.is_admin()
@@ -56,10 +50,16 @@ class Vanity:
                 json.dump(catfacts,f,sort_keys = True,indent = 4)
     '''
 
-    @commands.command()
-    async def markov(self):
+    @commands.command(pass_context=True)
+    async def markov(self, ctx):
+        '''Generates sentences up to 140 characters.
+        The text for titles/comments/text-posts are generated using "markov chains", a random process that's "trained" from looking at real data. If you've ever used a keyboard on your phone that tries to predict which word you'll type next, those are often built using something similar.
+
+        Basically, you feed in a bunch of sentences, and even though it has no understanding of the meaning of the text, it picks up on patterns like "word A is often followed by word B". Then when you want to generate a new sentence, it "walks" its way through from the start of a sentence to the end of one, picking sequences of words that it knows are valid based on that initial analysis. So generally short sequences of words in the generated sentences will make sense, but often not the whole thing. It's taught by messages that are being sent in the same server. All messages are stored anonymously.
+
+        A more detailed explanation: http://www.reddit.com/r/Python/comments/2ife6d/pykov_a_tiny_python_module_on_finite_regular/cl3bybj'''
         start_time = time.time()
-        with open(self.markov_file, 'r+') as f:
+        with open('markov/'+ctx.message.server.id+'.txt', 'r+') as f:
             text = f.read()
             for i in range(0,len(self.command_list)):
                 text = text.replace(self.command_list[i]+' ', '')
@@ -67,7 +67,10 @@ class Vanity:
             f.truncate()
             f.write(text)
         text_model = markovify.NewlineText(text)
-        await self.bot.say(text_model.make_short_sentence(140))
+        try:
+            await self.bot.say(text_model.make_short_sentence(140))
+        except:
+            await self.bot.say("I failed to generate a sentence, might need more data to study on.")
         end_time = time.time()
         diff_time = end_time - start_time
         print ("Markov took - "+str(diff_time))

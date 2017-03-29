@@ -6,6 +6,7 @@ import urllib.request, urllib.parse, praw, json
 import youtube_dl
 
 class Audio:
+    '''These don't fucking work.'''
 
     def __init__(self, bot):
         self.bot = bot

@@ -5,7 +5,7 @@ import os, re, time, random, datetime, pprint, pickle
 import urllib.request, urllib.parse, praw, json
 
 class Stats:
-    '''Statistics'''
+    '''Commands with no real purpose, but to provide statistics and information about the bot or the server.'''
 
     def __init__(self, bot):
         self.bot = bot

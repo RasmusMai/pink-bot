@@ -5,7 +5,7 @@ import os, re, time, random, datetime, pprint, pickle
 import urllib.request, urllib.parse, praw, json
 
 class Admin:
-    """Admin only commands"""
+    """Commands meant to make changes to the bot or the server."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -18,7 +18,7 @@ class Admin:
             with open ('blacklist.json', 'w') as f:
                 f.write('{}')
 
-    @commands.command(pass_context=True, hidden=True)
+    @commands.command(pass_context=True, hidden=True, no_pm=True)
     @checks.is_admin()
     async def changenickname(self, ctx, target : str):
         if len(target) > 32:
@@ -40,27 +40,30 @@ class Admin:
     async def nopresence(self):
         await self.bot.change_presence(game=None)
 
-    @commands.command(pass_context=True)
-    async def showpermissions(self, ctx):
+    @commands.group(pass_context=True, no_pm=True)
+    async def permissions(self, ctx):
         '''Shows the list of members that have admin permissions
 
         Can be used by anyone.'''
         permissions_list = []
         server = ctx.message.server
-        with open (self.permissions_file) as f:
-            permissions = json.load(f)
-            for member_id in permissions[str(server.id)]:
-                member = server.get_member(member_id)
-                if member is not None:
-                    permissions_list.append(member.name)
-        if not permissions_list:
-            await self.bot.say("No one has permissions.")
-        else:
-            await self.bot.say("The following users are in the permissions list: "+', '.join(permissions_list))
+        if ctx.invoked_subcommand is None:
+            with open (self.permissions_file) as f:
+                admins = json.load(f)
+                if server.id not in admins.keys():
+                    admins[server.id] = []
+                for member_id in admins[server.id]:
+                    member = server.get_member(member_id)
+                    if member is not None:
+                        permissions_list.append(member.name)
+            if not permissions_list:
+                await self.bot.say("No one has permissions.")
+            else:
+                await self.bot.say("The following users are in the permissions list: "+', '.join(permissions_list))
 
-    @commands.command(pass_context=True)
+    @permissions.command(name='add', pass_context=True, no_pm=True)
     @checks.is_admin()
-    async def addpermission(self, ctx, target : str):
+    async def _add(self, ctx, target : str):
         '''Allows a member to use administrative rights
 
         Can only be used by the bot owner or the server owner.
@@ -70,7 +73,7 @@ class Admin:
             return
         server = ctx.message.server
         target_id = target[2:-1]
-        target_id = target_id.strip('!')
+        target_id = target_id.strip('!') #Nicknamed people have a ! next to their id.
         with open (self.permissions_file, 'r') as f:
             admins = json.load(f)
             if str(server.id) not in admins.keys():
@@ -83,9 +86,9 @@ class Admin:
         with open (self.permissions_file, 'w') as f:
             json.dump(admins,f,sort_keys = True,indent = 4)
 
-    @commands.command(pass_context=True)
+    @permissions.command(name="remove", pass_context=True, no_pm=True)
     @checks.is_admin()
-    async def removepermission(self, ctx, target : str):
+    async def _remove(self, ctx, target : str):
         '''Disallows a member to use administrative rights
 
         Can only be used by the bot owner or the server owner.
@@ -108,27 +111,30 @@ class Admin:
         with open (self.permissions_file, 'w') as f:
             json.dump(admins,f,sort_keys = True,indent = 4)
 
-    @commands.command(pass_context=True)
-    async def showblacklist(self, ctx):
+    @commands.group(pass_context=True, no_pm=True)
+    async def blacklist(self, ctx):
         '''Shows the list of members that are blacklisted
 
         Can be used by anyone.'''
         blacklist_list = []
         server = ctx.message.server
-        with open (self.blacklist_file) as f:
-            blacklist = json.load(f)
-            for member_id in blacklist[str(server.id)]:
-                member = server.get_member(member_id)
-                if member is not None:
-                    blacklist_list.append(member.name)
-        if not blacklist_list:
-            await self.bot.say("No one is blacklisted.")
-        else:
-            await self.bot.say("The following users are in the blacklist: "+', '.join(blacklist_list))
+        if ctx.invoked_subcommand is None:
+            with open (self.blacklist_file) as f:
+                blacklist = json.load(f)
+                if str(server.id) not in blacklist.keys():
+                    blacklist[str(server.id)] = []
+                for member_id in blacklist[str(server.id)]:
+                    member = server.get_member(member_id)
+                    if member is not None:
+                        blacklist_list.append(member.name)
+            if not blacklist_list:
+                await self.bot.say("No one is blacklisted.")
+            else:
+                await self.bot.say("The following users are in the blacklist: "+', '.join(blacklist_list))
 
-    @commands.command(pass_context=True)
+    @blacklist.command(name='add', pass_context=True, no_pm=True)
     @checks.is_permissive()
-    async def addblacklist(self, ctx, target : str):
+    async def _add(self, ctx, target : str):
         '''Disables a person from using my commands.
 
         Can used by anyone with administrative rights.
@@ -154,9 +160,9 @@ class Admin:
         with open (self.blacklist_file, 'w') as f:
             json.dump(blacklist,f,sort_keys = True,indent = 4)
 
-    @commands.command(pass_context=True)
+    @blacklist.command(name='remove', pass_context=True, no_pm=True)
     @checks.is_permissive()
-    async def removeblacklist(self, ctx, target : str):
+    async def _remove(self, ctx, target : str):
         '''Enables a person to use my commands.
 
         Can used by anyone with administrative rights.
@@ -182,7 +188,7 @@ class Admin:
     def is_pink(self, message):
         return message.author == self.bot.user
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True,no_pm=True)
     @checks.is_permissive()
     async def pinkdelete(self, ctx):
         '''Used to delete my own messages

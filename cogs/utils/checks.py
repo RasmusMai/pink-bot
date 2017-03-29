@@ -25,11 +25,12 @@ def is_admin():
     return commands.check(lambda ctx: is_admin_check(ctx.message))
 
 def is_permissive_check(message):
-    with open (permissions_file) as f:
-        admins = json.load(f)
-        if str(message.author.id) in admins[str(message.server.id)] or message.author == message.server.owner:
-            return True
-        else:
-            return False
+    if not message.channel.is_private:
+        with open (permissions_file) as f:
+            admins = json.load(f)
+            if str(message.author.id) in admins[str(message.server.id)] or message.author == message.server.owner:
+                return True
+            else:
+                return False
 def is_permissive():
     return commands.check(lambda ctx:is_permissive_check(ctx.message))

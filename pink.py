@@ -39,15 +39,20 @@ async def on_ready():
 async def on_message(message):
     if message.author.bot:
         return
+    '''
     if message.server.id == "130386553548701696" or "224905357409910786":
         with open ('markov.txt', 'a') as markov_file:
             markov_file.write(message.content+'\n')
-    with open (blacklist_file, 'r') as f:
-        blacklist = json.load(f)
-        if str(message.server.id) not in blacklist.keys():
-            blacklist[str(message.server.id)] = []
-        if message.author.id in blacklist[str(message.server.id)]:
-            return
+    '''
+    with open ('markov/'+message.server.id+'.txt', 'a') as markov_file:
+        markov_file.write(message.content+'\n')
+    if not message.channel.is_private:
+        with open (blacklist_file, 'r') as f:
+            blacklist = json.load(f)
+            if str(message.server.id) not in blacklist.keys():
+                blacklist[str(message.server.id)] = []
+            if message.author.id in blacklist[str(message.server.id)]:
+                return
     if message.content.lower().strip(' ') == ("ayy"):
         await bot.send_message(message.channel,"lmao")
     if message.content.startswith(prefix):
@@ -113,6 +118,8 @@ def do_checks():
     if not os.path.isfile('markov.txt'):
             with open ('markov.txt', 'w') as f:
                 f.write('')
+    if not os.path.exists('markov/'):
+        os.makedirs('markov/')
 
 if __name__ == '__main__':
     do_checks()

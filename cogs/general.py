@@ -21,6 +21,11 @@ class General:
     async def nsfwping(self, ctx):
         await self.bot.say("nsfwpong")
 
+    @commands.command()
+    async def sourcecode(self):
+        '''Returns the link to my source code.'''
+        await self.bot.say("My source code is available on github: https://github.com/RasmusMai/pink-bot")
+
     @commands.command(pass_context=True)
     async def youtube(self, ctx):
         '''Returns the first search result.

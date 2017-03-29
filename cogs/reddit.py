@@ -5,7 +5,7 @@ import os, re, time, random, datetime, pprint, pickle
 import urllib.request, urllib.parse, praw, json
 
 class Reddit:
-    """Commands related to Reddit."""
+    """Commands related to Reddit, uses the Python library 'praw'."""
 
     def __init__(self, bot):
         self.bot = bot
