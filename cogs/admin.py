@@ -14,9 +14,6 @@ class Admin:
         if not os.path.isfile(self.permissions_file):
             with open (self.permissions_file, 'w') as f:
                 f.write('{}')
-        if not os.path.isfile('blacklist.json'):
-            with open ('blacklist.json', 'w') as f:
-                f.write('{}')
 
     @commands.command(pass_context=True, hidden=True, no_pm=True)
     @checks.is_admin()
@@ -213,6 +210,11 @@ class Admin:
             await self.bot.say('Please specify the count `pinkdelete <1-100>`. Keep in mind that it also counts messages that aren\'t sent by me')
         deleted = await self.bot.purge_from(message.channel, limit=int(purge_limit), check=self.is_pink)
         await self.bot.say('Deleted {} message(s)'.format(len(deleted)))
+
+        @commands.command(pass_context=True, hidden=True)
+        @checks.is_owner():
+        async def say(self, ctx):
+            await self.bot.say(ctx.message.content)
 
 def setup(bot):
     bot.add_cog(Admin(bot))

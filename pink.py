@@ -115,13 +115,15 @@ def do_checks():
         exit()
     if sys.version_info < (3, 5):
         print ("Python versions older than 3.5 are not supported.")
-    if not os.path.isfile('markov.txt'):
-            with open ('markov.txt', 'w') as f:
-                f.write('')
     if not os.path.exists('markov/'):
         os.makedirs('markov/')
+    if not os.path.isfile('blacklist.json'):
+        with open ('blacklist.json', 'w') as f:
+            f.write('{}')
+
 
 if __name__ == '__main__':
+    blacklist_file = 'blacklist.json'
     do_checks()
     credentials = load_credentials()
     if 'token' not in credentials.keys():
@@ -130,19 +132,19 @@ if __name__ == '__main__':
     for extension in initial_cogs:
         try:
             if extension == 'cogs.reddit' and 'reddit_secret' not in credentials.keys():
-                print ('Ignoring '+extension+'. No key in credentials.json provided.')
+                print ('Ignoring '+extension+'. No reddit keys in credentials.json provided.')
             else:
                 print('Loading extension -- ' + extension, end='')
                 bot.load_extension(extension)
                 print(' -- Success')
-                time.sleep(0.2)
+                time.sleep(0.2) #No real purpose, it just looks cooler.
         except Exception as e:
-            print('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
+            print('\nFailed to load extension {}\n{}: {}\n'.format(extension, type(e).__name__, e))
+            time.sleep(1)
     if platform.system() == 'Windows':
         os.system('cls')
     else:
         os.system('clear')
-    blacklist_file = 'blacklist.json'
     print('<><><><><><><><><><><><><><><><><><><><><><><><><>')
     token = credentials['token']
     bot.run(token)
