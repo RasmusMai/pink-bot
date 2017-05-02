@@ -77,11 +77,11 @@ class General:
         await self.bot.say(embed=data)
 
     def get_weather(self, location):
-        if location.split(' ',1)[0] == 'f' or location.split(' ',1)[0] == 'fahrenheit':
+        if location.split(' ',1)[0].lower() == 'f' or location.split(' ',1)[0].lower() == 'fahrenheit':
             units = 'imperial'
             location = location.split(' ',1)[1]
         else:
-            if location.split(' ',1)[0] == 'c' or location.split(' ',1)[0] == "celsius":
+            if location.split(' ',1)[0].lower() == 'c' or location.split(' ',1)[0].lower() == "celsius":
                 location = location.split(' ',1)[1]
             units = 'metric'
         location = urllib.parse.quote_plus(location)

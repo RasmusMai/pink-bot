@@ -212,7 +212,7 @@ class Admin:
         await self.bot.say('Deleted {} message(s)'.format(len(deleted)))
 
         @commands.command(pass_context=True, hidden=True)
-        @checks.is_owner():
+        @checks.is_owner()
         async def say(self, ctx):
             await self.bot.say(ctx.message.content)
 

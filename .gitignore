@@ -5,3 +5,4 @@ markov/
 weeb_pics/
 __pycache__/
 !requirements.txt
+credentials.json
