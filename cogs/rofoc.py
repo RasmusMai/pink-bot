@@ -10,7 +10,27 @@ class Rofoc:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=['colour'], pass_context=True)
+    @commands.command(pass_context=True, hidden=True, no_pm=True)
+    async def clearunusedcolors(self, ctx):
+        await self.bot.send_typing(ctx.message.channel)
+        used_roles = []
+        roles_deleted = []
+        message = ctx.message
+        for member in message.server.members:
+            for role in member.roles:
+                if role.name.startswith('#'):
+                    used_roles.append(role)
+        for role in message.server.roles:
+            if role.name.startswith('#'):
+                if role not in used_roles:
+                    roles_deleted.append(role.name)
+                    await self.bot.delete_role(message.server, role)
+        if len(roles_deleted) == 0:
+            await self.bot.say("There are no unused colors.")
+        else:
+            await self.bot.say("Deleted {} roles: {}".format(len(roles_deleted),' '.join(roles_deleted)))
+
+    @commands.command(aliases=['colour'], pass_context=True, no_pm=True)
     async def color(self, ctx, requested_color : str):
         '''Change the color of your own name.
         Example: color green'''
@@ -42,9 +62,12 @@ class Rofoc:
     async def do_hex_color(self, requested_color, message):
         possible_colors = ['red','blue','green','purple','orange','yellow','grey','brown','none']
         requested_color = requested_color.lower()
-        if len(requested_color) > 7:
-            await self.bot.say("That's not a proper hex code. Example `#F02BA2`")
-            return
+        if len(requested_color) is not 7:
+            if len(requested_color) == 4:
+                requested_color = '#'+requested_color[1]*2+requested_color[2]*2+requested_color[3]*2
+            else:
+                await self.bot.say("That's not a proper hex code. Example `#F02BA2`")
+                return
         try:
             int(requested_color[1:],16)
         except:
