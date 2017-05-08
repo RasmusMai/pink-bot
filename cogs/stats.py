@@ -55,6 +55,7 @@ class Stats:
         embed.add_field(name="Highest role", value=user_object.roles[1])
         if user_object.game:
             embed.add_field(name="Playing", value=user_object.game.name)
+        await self.bot.say(embed=embed)
     
 def setup(bot):
     bot.add_cog(Stats(bot))
