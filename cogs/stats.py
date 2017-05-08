@@ -37,6 +37,24 @@ class Stats:
         else:
             embed.set_author(name=server.name)
         await self.bot.say(embed=embed)
-
+    
+    @commands.command(pass_context=True, no_pm=True)
+    async def userinfo(self, ctx, str : user):
+        if not user.startswith("<@"):
+            return
+        user_object = await self.bot.get_member(user[2:1])
+        created_at = ("Since "+user_object.created_at.strftime("%d %b %Y %H:%M")+", "+str(days_passed)+" days ago.")
+        color = discord.Color(random.randint(0,16777215))
+        embed = discord.Embed(description=created_at, colour=color)
+        if user_object.avatar_url:
+            embed.set_thumbnail(url=user_object.avatar_url)
+        embed.set_author(name=user_object.nick)
+        embed.add_field(name="Full name", value=user_object.name + str(user_object.discriminator))
+        embed.add_field(name="Status", value=str(self.user_object.status))
+        embed.add_field(name="Roles", value=len(user_object.roles)-1)
+        embed.add_field(name="Highest role", value=user_object.roles[1])
+        if user_object.game:
+            embed.add_field(name="Playing", value=user_object.game.name)
+    
 def setup(bot):
     bot.add_cog(Stats(bot))
