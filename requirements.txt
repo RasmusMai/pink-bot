@@ -37,7 +37,7 @@ oneconf==0.3.9
 ordereddict==1.1
 padme==1.1.1
 pexpect==4.0.1
-Pillow==3.1.2
+Pillow==6.2.0
 piston-mini-client==0.7.5
 plainbox==0.25
 praw==4.4.0
