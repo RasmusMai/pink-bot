@@ -86,6 +86,17 @@ class Reddit:
             #await bot.say("I couldn't fetch that subreddit. Could be that the subreddit requires user login or it just doesn't exist.")
             return ("I couldn't fetch that subreddit. Could be that the subreddit requires user login or it just doesn't exist.")
 
+	@commands.command(pass_context=True)
+	async def searchreddit(self, ctx):
+		subreddit = ctx.message.content.split(' ',2)[1]
+		query = ctx.message.content.split(' ',2)[2]
+		results = self.reddit.subreddit(subreddit).search(query)
+		top_result = results[0]
+		if "nsfl" not in top_result.title.lower():
+			if "nsfw" in top_result.title.lower() and "nsfw" not in ctx.message.channel.name:
+				await self.bot.say("**"+top_result.title+"**\n"+top_result.url) 
+			else: #TODO: When the top result is NSFW, iterate to the next one.
+				await self.bot.say("Results for the search are NSFW and I won't send NSFW posts in non-NSFW channels, sorry.")
 
 def setup(bot):
     bot.add_cog(Reddit(bot))
