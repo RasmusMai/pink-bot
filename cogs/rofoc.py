@@ -11,11 +11,11 @@ class Rofoc(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="B")
+    @commands.command(name="B", description="Ordered by nikens")
     async def nikki_b(self, ctx):
         await ctx.send("B")
 
-    @commands.command(name="bean")
+    @commands.command(name="bean", description="Ordered by dave")
     async def dave_bean(self, ctx):
         choice = random.choice(self.bean_links)
         await ctx.send(choice)
