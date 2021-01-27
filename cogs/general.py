@@ -1,6 +1,5 @@
 from discord.ext import commands
 import markovify
-import time
 
 
 class General(commands.Cog):
@@ -10,10 +9,6 @@ class General(commands.Cog):
     @commands.command(hidden=True)
     async def ping(self, ctx):
         await ctx.send("pong")
-
-    @commands.command()
-    async def studentcount(self, ctx):
-        await ctx.send("many")
 
     @commands.command(pass_context=True)
     async def markov(self, ctx):
@@ -31,21 +26,18 @@ class General(commands.Cog):
 
         A more detailed explanation:
         http://www.reddit.com/r/Python/comments/2ife6d/pykov_a_tiny_python_module_on_finite_regular/cl3bybj"""
-        start_time = time.time()
-        with open('markov/' + str(ctx.message.guild.id) + '.txt', 'r+', encoding="utf8") as f:
-            text = f.read()
-            f.seek(0)
-            f.truncate()
-            f.write(text)
-        text_model = markovify.NewlineText(text)
-        text = text_model.make_short_sentence(140)
-        if text:
-            await ctx.send(text)
-        else:
-            await ctx.send("I failed to generate a sentence, might need more data to study on.")
-
-        end_time = time.time()
-        diff_time = end_time - start_time
+        async with ctx.channel.typing():
+            with open('markov/' + str(ctx.message.guild.id) + '.txt', 'r+', encoding="utf8") as f:
+                text = f.read()
+                f.seek(0)
+                f.truncate()
+                f.write(text)
+            text_model = markovify.NewlineText(text)
+            text = text_model.make_short_sentence(140)
+            if text:
+                await ctx.send(text)
+            else:
+                await ctx.send("I failed to generate a sentence, might need more data to study on.")
 
 
 def setup(bot):

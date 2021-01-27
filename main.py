@@ -17,7 +17,8 @@ bot = commands.Bot(command_prefix=prefix, description=description)
 
 cogs = [
     'cogs.general',
-    'cogs.rofoc'
+    'cogs.piston',
+    'cogs.admin'
 ]
 
 
@@ -46,11 +47,14 @@ def _load_credentials():
 async def on_message(message):
     if message.author.bot:
         return
+    """
     if message.guild:
         with open('markov/'+str(message.guild.id)+'.txt', 'a', encoding="utf8") as markov_file:
             markov_file.write(message.content+'\n')
+    """
     if message.content.startswith(prefix):
         await bot.process_commands(message)
+
 
 @bot.event
 async def on_command_error(ctx, error):

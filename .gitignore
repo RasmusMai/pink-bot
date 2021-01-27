@@ -4,3 +4,5 @@
 markov/
 __pycache__/
 credentials.json
+.vscode
+.idea
