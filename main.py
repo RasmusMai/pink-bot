@@ -2,7 +2,6 @@ from discord.ext import commands
 import os
 import sys
 import json
-import platform
 import time
 import traceback
 
@@ -32,8 +31,7 @@ def _do_checks():
 
 @bot.event
 async def on_ready():
-    print('Logged in as')
-    print(bot.user.name)
+    print(f'Logged in as {bot.user.name}')
     print(bot.user.id)
     print('------')
 
@@ -88,19 +86,12 @@ if __name__ == "__main__":
     credentials = _load_credentials()
     for extension in cogs:
         try:
-            if extension == 'cogs.reddit' and 'reddit_secret' not in credentials.keys():
-                print('Ignoring '+extension+'. No reddit keys in credentials.json provided.')
-            else:
-                print('Loading extension -- ' + extension, end='')
-                bot.load_extension(extension)
-                print(' -- Success')
-                time.sleep(0.2)  # No real purpose, it just looks cooler.
+            print('Loading extension -- ' + extension, end='')
+            bot.load_extension(extension)
+            print(' -- Success')
+            time.sleep(0.2)  # No real purpose, it just looks cooler.
         except Exception as e:
             print('\nFailed to load extension {}\n{}: {}\n'.format(extension, type(e).__name__, e))
             time.sleep(1)
-    if platform.system() == 'Windows':
-        os.system('cls')
-    else:
-        os.system('clear')
     token = credentials['token']
     bot.run(token)
